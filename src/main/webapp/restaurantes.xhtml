@@ -1,39 +1,88 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
 	<title>Pantalla Restaurantes</title>
 	<h:outputStylesheet library="css" name="styles.css"></h:outputStylesheet>
+	<meta name="viewport"
+		content="user-scalable=no, width=device-width, initial-scale=1"></meta>
 </h:head>
 
 <h:body>
+	<!-- Para poder aplicar un filtro y/o agragrar elementos de exportacion, se necesita que la pagina sea un formulario -->
+	<h:form>
+		<!-- ::::::::::::: AGREGA AQUI LA TABLA DE RESTAURANTES ::::::::::::::::::: -->
+		<p:dataTable id="tblRestaurantes" var="restaurante"
+			value="#{restauranteController.restaurante}" paginator="true"
+			rows="10"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+			currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+			rowsPerPageTemplate="5,10,15"
+			filteredValue="#{restauranteController.restaurantesfiltrados}"
+			reflow="true">
 
-	<!-- ::::::::::::: AGREGA AQUI LA TABLA DE RESTAURANTES ::::::::::::::::::: -->
-	<h:dataTable id="tblRestaurantes" var="restaurante"
-		value="#{restauranteController.restaurante}" headerClass="headerTable"
-		rowClasses="rowTable rowTableLine">
+			<f:facet name="{Exporters}">
+				<div style="float: right; padding-top: 5px;">
+					<h:commandLink>
+						<p:graphicImage name="/imgs/excel.png" width="24" />
+						<p:dataExporter type="xls" target="tblRestaurantes"
+							fileName="ReporteRestaurantes" />
+					</h:commandLink>
 
-		<h:column>
-			<f:facet name="header">Nombre</f:facet>
-			<h:outputText value="#{restaurante.nombre}"></h:outputText>
-		</h:column>
-		<h:column>
-			<f:facet name="header">Dirección</f:facet>
-			<h:outputText value="#{restaurante.direccion}"></h:outputText>
-		</h:column>
-		<h:column>
-			<f:facet name="header">País</f:facet>
-			<h:outputText value="#{restaurante.pais}"></h:outputText>
-		</h:column>
-		<h:column>
-			<f:facet name="header">Gerente</f:facet>
-			<h:outputText value="#{restaurante.gerente}"></h:outputText>
-		</h:column>
+					<h:commandLink>
+						<p:graphicImage name="/imgs/xlsx.png" width="24" />
+						<p:dataExporter type="xlsxstream" target="tblRestaurantes"
+							fileName="ReporteRestaurantes" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage name="/imgs/pdf.png" width="24" />
+						<p:dataExporter type="pdf" target="tblRestaurantes"
+							fileName="ReporteRestaurantes" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage name="/imgs/csv.png" width="24" />
+						<p:dataExporter type="csv" target="tblRestaurantes"
+							fileName="ReporteRestaurantes" />
+					</h:commandLink>
+
+					<h:commandLink>
+						<p:graphicImage name="/imgs/xml.png" width="24" />
+						<p:dataExporter type="xml" target="tblRestaurantes"
+							fileName="ReporteRestaurantes" />
+					</h:commandLink>
+
+				</div>
+			</f:facet>x	
 
 
-	</h:dataTable>
+			<p:column headerText="Nombre" filterBy="#{restaurante.nombre}"
+				filterMatchMode="contains">
+				<h:outputText value="#{restaurante.nombre}"></h:outputText>
+			</p:column>
 
+			<p:column headerText="Dirección">
+
+				<h:outputText value="#{restaurante.direccion}"></h:outputText>
+			</p:column>
+
+			<p:column headerText="País" filterBy="#{restaurante.pais}"
+				filterMatchMode="contains">
+
+				<h:outputText value="#{restaurante.pais}"></h:outputText>
+			</p:column>
+
+			<p:column headerText="Gerente">
+
+				<h:outputText value="#{restaurante.gerente}"></h:outputText>
+			</p:column>
+
+
+		</p:dataTable>
+	</h:form>
 </h:body>
 
 </html>
